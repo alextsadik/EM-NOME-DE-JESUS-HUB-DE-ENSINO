@@ -1,0 +1,6 @@
+{
+  "name": "Em Nome de Jesus - O Evangelho da Graça",
+  "description": "Jogo e simulador bíblico sobre o poder do Nome de Jesus, o Ministério da Reconciliação, o Evangelho da Graça e a prática de Colossenses 3:17.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
