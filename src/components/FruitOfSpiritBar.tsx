@@ -6,6 +6,9 @@
 import React from 'react';
 import { PlayerStats } from '../types/game';
 import { Heart, ShieldCheck, Flame, Sparkles, Award } from 'lucide-react';
+import { calculateWorshipScore } from '../data/biblicalContent';
+import { getSpiritualMaturity } from '../data/spiritualMaturity';
+import { AvatarFrame } from './AvatarFrame';
 
 interface FruitOfSpiritBarProps {
   stats: PlayerStats;
@@ -22,6 +25,9 @@ export const FruitOfSpiritBar: React.FC<FruitOfSpiritBarProps> = ({
   onOpenMedals,
   unlockedMedalsCount = 0,
 }) => {
+  const worshipScore = calculateWorshipScore(stats);
+  const maturityTier = getSpiritualMaturity(worshipScore);
+
   return (
     <div className="w-full bg-slate-900/60 border-b border-slate-800 px-4 md:px-8 py-3">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-4">
@@ -38,6 +44,17 @@ export const FruitOfSpiritBar: React.FC<FruitOfSpiritBarProps> = ({
 
         {/* Biblical ministry stats (clean unboxed text with typographic separators) */}
         <div className="flex items-center gap-4 text-xs text-slate-400 tabular-nums overflow-x-auto">
+          {/* Spiritual Maturity Tier & Worship Score with Animated Avatar Frame */}
+          <div
+            className="flex items-center gap-1.5 whitespace-nowrap cursor-default"
+            title={`Nível de Maturidade Espiritual: ${maturityTier.title} (${worshipScore.toLocaleString()} pts de Adoração)`}
+          >
+            <AvatarFrame stats={stats} size="xs" showAura={false} showBadgeChip={false} />
+            <span className="text-amber-300 font-semibold">{maturityTier.title}</span>
+            <span className="text-slate-500 font-mono text-[11px]">({worshipScore.toLocaleString()} pts)</span>
+          </div>
+          <span className="text-slate-700 select-none">·</span>
+
           {onOpenMedals && (
             <>
               <button

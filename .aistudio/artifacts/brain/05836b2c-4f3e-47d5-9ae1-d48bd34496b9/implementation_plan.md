@@ -1,79 +1,107 @@
-# Adição da Seção "Guia de Autoridade" na Batalha da Fé
+# Sistema de Níveis de Maturidade Espiritual & Conquistas Ocultas (Badges)
 
-Implementação de uma seção interativa dedicada ao fortalecimento bíblico do crente ao exercer as Vozes de Comando contra principados e potestades, com passagens canônicas de autoridade delegada por Cristo, suporte vocal e ativação de proclamações.
+Implementação dos Níveis de Maturidade Espiritual guiados pela pontuação do WorshipScore com privilégios visuais dinâmicos (selos dourados, auras radiantes e molduras de avatar) e um novo sistema de Conquistas Ocultas com silhuetas misteriosas e dicas sutis no Altar das Medalhas.
 
----
-
-### Decisões Confirmadas com o Usuário
+## Decisões Confirmadas & Respostas do Usuário
 
 > [!IMPORTANT]
-> **Respostas Confirmadas do Usuário:**
-> 1. **Organização Visual:** Cartões interativos organizados por **armas espirituais e esferas de autoridade** (Armadura de Deus, Chaves do Reino, O Sangue do Cordeiro, Soberania do Nome de Jesus e Resistência Espiritual).
-> 2. **Recursos Interativos:**
->    - **Botão "Ouvir Escritura":** Leitura em voz alta via Web Speech API em português com entonação reverente.
->    - **Botão "Proclamar com Fé":** Proclamação imediata da autoridade que reproduz o acorde celestial, atualiza a fidelidade no gráfico do ministério e registra a ação espiritual.
+> Decisões tomadas na Fase 1 de alinhamento com base na preferência do usuário:
+
+- **Exibição dos Níveis de Maturidade e Privilégios Visuais**: Confirmado o uso de **selos dourados com auras radiantes no perfil e molduras de avatar ornamentadas** (evoluindo de Bronze do Santuário até a Coroa de Ouro Eterna com partículas).
+- **Aparência das Conquistas Ocultas no Modal**: Confirmada a exibição de **silhuetas misteriosas com dicas sutis e proféticas sobre o desafio bíblico**, revelando o selo completo e a bênção somente quando o marco for alcançado.
 
 ---
 
-## 1. Visão Geral e Conceito Bíblico
+## 1. Visão Geral & Conceito Central
 
-### Por Que um Guia de Autoridade?
-A autoridade espiritual cristã não repousa em entusiasmo carnal ou fórmulas vazias, mas na **Palavra Eterna de Deus**:
-- *"Eis que vos dei autoridade para pisar serpentes e escorpiões e sobre todo o poder do inimigo, e nada vos causará dano algum"* (Lucas 10:19).
-- *"As armas da nossa milícia não são carnais, mas sim poderosas em Deus para destruição de fortalezas"* (2 Coríntios 10:4).
-- O Guia de Autoridade instrui o jogador sobre a base jurídica e espiritual de cada comando emitido contra principados e potestades.
+- **O que faz**:
+  1. **Níveis de Maturidade Espiritual**: Vincula o progresso contínuo de adoração, escuta na Rádio 24h, meditações e decretos ao `WorshipScore`. Conforme o crente atinge faixas de pontuação bíblicas (Vigia, Cantor, Levita, Salmista, Coluna, Adorador Eterno), desbloqueia títulos honoríficos, molduras celestiais de avatar e auras com partículas visuais em toda a aplicação.
+  2. **Conquistas Ocultas do Reino (Secret Badges)**: Acrescenta uma seção dedicada no `MedalsModal` que lista marcos secretos do discipulado (ex: 100 horas de escuta na Rádio, 10 decretos proclamados em um único dia, vigília na madrugada, intercessão contínua). As medalhas ainda não conquistadas aparecem como silhuetas místicas sombreadas com enigmas bíblicos que inspiram o jogador a buscar mais intimidade com o Senhor.
+- **Público-Alvo**: Jogadores e discípulos que buscam motivação e gamificação edificante para sua rotina de comunhão diária e adoração contínua (Colossenses 3:17).
+- **Valor Principal**: Estimula o aprofundamento espiritual com marcos gratificantes e identidade visual reverente, sem apelar para clichês de jogos seculares.
 
 ---
 
-## 2. Estrutura do Conteúdo e Passagens Selecionadas
+## 2. Experiência do Usuário & Design Visual
+
+### Fluxos Principais
+1. **Inspeção de Maturidade e Molduras**:
+   - No cabeçalho (`TopBar`) e barra devocional (`FruitOfSpiritBar`), o avatar do jogador exibe a moldura celestial correspondente ao seu nível atual (ex: moldura com brilho dourado e aura para Adorador Eterno).
+   - Ao passar o cursor ou clicar, um card devocional apresenta o título atual, pontos acumulados, versículo-âncora e o próximo patamar de maturidade com barra progressiva.
+2. **Descoberta das Conquistas Ocultas no Modal de Medalhas**:
+   - Ao abrir o `MedalsModal`, o usuário encontra um seletor no topo entre **Medalhas Ministeriais** (as 8 medalhas já existentes) e **Conquistas Ocultas do Reino** (novas 8 insígnias secretas).
+   - As conquistas bloqueadas exibem um contorno estilizado em silhueta escura com brilho sutil e uma dica sagrada (ex: *"Dica: À meia-noite, Paulo e Silas oravam e cantavam hinos a Deus..."*).
+   - Ao cumprir um marco secreto, a insígnia é revelada com uma animação celestial, sino harmônico e botão de reivindicação de Frutos do Espírito e Pontos de Graça.
+
+### Identidade Visual & Tema
+- **Cores & Tokens**: Paleta bíblica com 60% ardósia profunda (`#020617` / `#0f172a`), 30% superfícies estruturais em vidro fumê e bordas finas âmbar/douradas (`border-amber-500/20`), 10% acentos dourados e auras radiantes (`#f59e0b`, `#fbbf24`, `#fef08a`).
+- **Tipografia**: Cinzel para títulos nobres e nomes de patamar de maturidade; Plus Jakarta Sans para leitura de instruções e textos reflexivos; numerais tabulares para contagem de horas e pontuação.
+- **Molduras de Avatar**:
+  - *Nível 1 (Vigia)*: Aro simples de prata celulóide com ponto de luz suave.
+  - *Nível 2 (Cantor)*: Moldura de bronze esculpido com notas de adoração.
+  - *Nível 3 (Levita)*: Aro de ouro polido com trombeta levítica.
+  - *Nível 4 (Salmista)*: Moldura ametista com filigranas de harpa e pergaminho.
+  - *Nível 5 (Coluna)*: Moldura de safira com pilares esculpidos de Jerusalém.
+  - *Nível 6 (Adorador Eterno)*: Coroa de ouro puro com aura pulsante dourada e halo de luz divina.
+
+---
+
+## 3. Decisões de Produto & Arquitetura de Dados
+
+- **Cálculo Unificado de WorshipScore**: Utiliza a função existente `calculateWorshipScore(stats)`, somando minutos de rádio, desafios de salmos completados e minutos de meditação, garantindo que o progresso prévio do jogador seja 100% reconhecido.
+- **Rastreamento de Metas Temporais Diárias**:
+  - Para a conquista *"10 decretos em um único dia"*, o sistema verifica `stats.todaySpiritualStats.decrees` ou calcula os decretos proclamados na data atual (`todayDateStr`), desbloqueando automaticamente a conquista secreta.
+  - Para a conquista *"100 horas de adoração"*, verifica se `radioListeningMinutes >= 6000` (ou oferece marcos progressivos com feedback claro).
+  - Para *"Vigília da Madrugada"*, detecta se a atividade ocorreu entre 00:00 e 06:00.
+- **Persistência**: Armazenamento integrado em `PlayerStats` sob `unlockedHiddenBadges?: string[]` e `claimedHiddenBadges?: string[]` salvo automaticamente no `localStorage` via chave existente.
+
+---
+
+## 4. Arquitetura Técnica & Diagrama de Componentes
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
-│ FILTRO DE ESFERAS: Todas | Armadura de Deus | Chaves do Reino | Sangue │
-├────────────────────────────────────────────────────────────────────────┤
-│ CARTÃO DE AUTORIDADE:                                                  │
-│ - Título da Arma: "As Chaves do Reino dos Céus e o Poder de Ligar"     │
-│ - Referência: Mateus 16:19 & Mateus 18:18                             │
-│ - Texto Sagrado: "Tudo o que ligardes na terra terá sido ligado..."    │
-│ - Instrução de Combate: Como usar para amarrar o valente e soltar vidas│
-│                                                                        │
-│ [Ouvir Versículo] [Copiar Texto] [Proclamar Autoridade Imediata]       │
-└────────────────────────────────────────────────────────────────────────┘
+│                        App State (PlayerStats)                         │
+│   worshipScore · radioListeningMinutes · dailyProgress · unlockedBadges│
+└───────────────────┬────────────────────────────────┬───────────────────┘
+                    │                                │
+                    ▼                                ▼
+       ┌────────────────────────┐       ┌────────────────────────┐
+       │   TopBar & FruitBar    │       │      MedalsModal       │
+       │   Avatar com Moldura   │       │   Aba Conquistas       │
+       │   Selo & Aura Dourada  │       │   Ocultas & Dicas      │
+       └────────────┬───────────┘       └────────────┬───────────┘
+                    │                                │
+                    ▼                                ▼
+       ┌────────────────────────┐       ┌────────────────────────┐
+       │ SpiritualMaturityBadge │       │    HiddenBadgesGrid    │
+       │  Tooltip com Detalhes  │       │  Silhuetas Misteriosas │
+       │  do Nível e Vantagens  │       │  e Revelação de Graça  │
+       └────────────────────────┘       └────────────────────────┘
 ```
 
-### Esferas de Autoridade Contempladas:
-1. **Esfera da Autoridade Delegada:** Lucas 10:19 & Mateus 28:18-19 (Pisar serpentes e escorpiões).
-2. **Esfera das Chaves do Reino:** Mateus 16:19 & Mateus 18:18 (Ligar e desligar nos céus e na terra).
-3. **Esfera da Vitória Consumada na Cruz:** Colossenses 2:15 & Apocalipse 12:11 (Despojo dos principados e vitória pelo Sangue).
-4. **Esfera da Armadura Completa de Deus:** Efésios 6:10-18 (Capacete, escudo da fé, espada do Espírito).
-5. **Esfera da Submissão e Resistência:** Tiago 4:7 & 1 Pedro 5:8-9 (Sujeitar-se a Deus e o diabo fugirá).
-6. **Esfera da Guarda Angelical:** Salmos 91:11-13 (Ordem aos anjos para guardar em todos os caminhos).
+### Mapeamento dos Novos Tipos e Estruturas
+1. **`SpiritualMaturityTier`**:
+   - `id`: `vigia` | `cantor` | `levita` | `salmista` | `coluna` | `adorador_eterno`
+   - `title`: Título nobiliárquico bíblico
+   - `minScore`: Pontuação mínima de WorshipScore
+   - `avatarFrameClass`: Classes de borda e efeito de aura no avatar
+   - `auraColor`: Cor do brilho radiante
+   - `perkDescription`: Privilégio espiritual visual e bênção diária
+2. **`HiddenBadge`**:
+   - `id`: Identificador único
+   - `title`: Nome da Conquista
+   - `secretHint`: Dica sutil e bíblica antes do desbloqueio
+   - `scriptureRef`: Passagem bíblica revelada
+   - `description`: Explicação do feito espiritual
+   - `icon`: Ícone temático
+   - `condition`: Função de verificação contra `PlayerStats`
+   - `reward`: Bônus de fruto e pontos de graça
 
 ---
 
-## 3. Arquitetura Técnica e Arquivos
-
-1. **`src/types/game.ts`**:
-   - Definição da interface `AuthorityScriptureGuide`:
-     ```typescript
-     export interface AuthorityScriptureGuide {
-       id: string;
-       title: string;
-       sphere: 'armadura' | 'chaves_reino' | 'sangue_cruz' | 'autoridade_delegada' | 'guarda_angelical';
-       scriptureRef: string;
-       text: string;
-       combatInstruction: string;
-       proclamationDeclaration: string;
-     }
-     ```
-2. **`src/data/biblicalContent.ts`**:
-   - Adição do array `AUTHORITY_SCRIPTURES` com 6 passagens fundamentais completas e instruções pastorais.
-3. **`src/components/SpiritualBattleView.tsx`**:
-   - Inserção da seção **"Guia de Autoridade das Escrituras"** com filtros de esferas, cartões estilizados em ardósia nobre e ouro, controles de áudio e atalho para proclamar.
-4. **Validação:**
-   - Execução de `lint_applet` e `compile_applet`.
-
----
-
-## 4. Próximos Passos
-Após sua aprovação, implementaremos a seção interativa **"Guia de Autoridade"** no módulo de Batalha da Fé.
+## Verificação e Próximos Passos
+- Após aprovação, executar a criação dos dados em `src/data/spiritualMaturity.ts` e `src/data/hiddenBadges.ts`.
+- Atualizar `types/game.ts` e a interface `MedalsModal.tsx` com a nova aba e silhuetas estilizadas.
+- Enriquecer o avatar no `TopBar.tsx`, `RankDeAdoradores.tsx` e `FruitOfSpiritBar.tsx` com as molduras e auras douradas.
+- Compilar o projeto com `compile_applet` e validar com `lint_applet`.

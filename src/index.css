@@ -57,3 +57,96 @@
 .animate-heartbeat {
   animation: heartbeat 1.3s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
 }
+
+/* Avatar Frame Decorative Animations & Animated Gradients */
+@keyframes frame-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes frame-rotate-reverse {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes frame-pulse-glow {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.75;
+  }
+  50% {
+    transform: scale(1.07);
+    opacity: 1;
+  }
+}
+
+@keyframes gradient-shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-frame-rotate {
+  animation: frame-rotate 9s linear infinite;
+}
+
+.animate-frame-rotate-fast {
+  animation: frame-rotate 4.5s linear infinite;
+}
+
+.animate-frame-rotate-reverse {
+  animation: frame-rotate-reverse 11s linear infinite;
+}
+
+.animate-frame-pulse {
+  animation: frame-pulse-glow 2.4s ease-in-out infinite;
+}
+
+.animate-gradient-shimmer {
+  background-size: 250% 250%;
+  animation: gradient-shimmer 4s ease infinite;
+}
+
+/* Ancient Biblical Parchment Unrolling Effect */
+@keyframes parchment-unroll {
+  0% {
+    transform: scaleY(0.15) scaleX(0.96);
+    opacity: 0;
+    filter: blur(3px);
+  }
+  60% {
+    transform: scaleY(1.02) scaleX(1.01);
+    opacity: 0.95;
+    filter: blur(0);
+  }
+  100% {
+    transform: scaleY(1) scaleX(1);
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+.animate-parchment-unroll {
+  transform-origin: top center;
+  animation: parchment-unroll 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.parchment-texture {
+  background: radial-gradient(circle at 50% 25%, #2a2015 0%, #1c150e 65%, #140e08 100%);
+  box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.7), 0 12px 30px -5px rgba(0, 0, 0, 0.8);
+}
+

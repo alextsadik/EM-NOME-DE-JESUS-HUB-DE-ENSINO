@@ -26,25 +26,37 @@ import {
   MessageSquareQuote,
   ChevronDown,
   ChevronUp,
+  BellRing,
+  Scroll,
 } from 'lucide-react';
-import { PlayerStats, PrayerEntry, PrayerType, PrayerCategory } from '../types/game';
+import { PlayerStats, PrayerEntry, PrayerType, PrayerCategory, PrayerReminder } from '../types/game';
 import { PRAYER_THEMES_INFO, INITIAL_PRAYER_ENTRIES } from '../data/biblicalContent';
 import { soundService } from '../services/soundEffects';
+import { ScheduledPrayerRemindersPanel } from './ScheduledPrayerRemindersPanel';
+import { PrayerReminderNotificationModal } from './PrayerReminderNotificationModal';
+import { DailyGratitudeParchment } from './DailyGratitudeParchment';
+import { WeeklySpiritualGrowthChart } from './WeeklySpiritualGrowthChart';
+import { SharedIntercessionMural } from './SharedIntercessionMural';
+import { PrayerParchmentExportModal } from './PrayerParchmentExportModal';
 
 interface PrayerJournalViewProps {
   stats: PlayerStats;
   onUpdateStats: (newStats: PlayerStats) => void;
+  onTriggerVisualReminder?: (reminder: PrayerReminder) => void;
 }
 
 export const PrayerJournalView: React.FC<PrayerJournalViewProps> = ({
   stats,
   onUpdateStats,
+  onTriggerVisualReminder,
 }) => {
   const [entries, setEntries] = useState<PrayerEntry[]>(() => {
     return stats.prayerEntries && stats.prayerEntries.length > 0
       ? stats.prayerEntries
       : INITIAL_PRAYER_ENTRIES;
   });
+
+  const [localReminderAlert, setLocalReminderAlert] = useState<PrayerReminder | null>(null);
 
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
   const [selectedType, setSelectedType] = useState<PrayerType>('gratidao');
@@ -58,6 +70,27 @@ export const PrayerJournalView: React.FC<PrayerJournalViewProps> = ({
   const [prayingEntryId, setPrayingEntryId] = useState<string | null>(null);
   const [answeringModalId, setAnsweringModalId] = useState<string | null>(null);
   const [testimonyInput, setTestimonyInput] = useState<string>('');
+  const [isExportModalOpen, setIsExportModalOpen] = useState<boolean>(false);
+
+  const handleTriggerVisualAlert = (rem: PrayerReminder) => {
+    if (onTriggerVisualReminder) {
+      onTriggerVisualReminder(rem);
+    } else {
+      setLocalReminderAlert(rem);
+    }
+  };
+
+  const handleOpenFromReminder = (rem: PrayerReminder) => {
+    setTitle(`Consagração: ${rem.title} (${rem.time})`);
+    setSelectedType('gratidao');
+    setSelectedCategory('espiritual');
+    setScriptureRef(rem.scriptureRef || 'Colossenses 3:17');
+    setDescription(
+      `"E tudo quanto fizerdes por palavras ou por obras, fazei-o em nome do Senhor Jesus, dando por ele graças a Deus Pai." (Colossenses 3:17). Em Nome de Jesus Cristo, consagro este momento sagrado de oração das ${rem.time}. ${rem.adorationPrompt}`
+    );
+    setIsFormOpen(true);
+    setLocalReminderAlert(null);
+  };
 
   const currentTheme = PRAYER_THEMES_INFO[selectedCategory];
 
@@ -291,20 +324,74 @@ export const PrayerJournalView: React.FC<PrayerJournalViewProps> = ({
         </div>
       </div>
 
+      {/* Weekly Spiritual Growth Chart (Recharts: Prayers & Decrees Frequency) */}
+      <WeeklySpiritualGrowthChart stats={stats} />
+
+      {/* Scheduled Prayer Reminders Panel (Colossians 3:17) */}
+      <ScheduledPrayerRemindersPanel
+        onTriggerVisualAlert={handleTriggerVisualAlert}
+        onUpdateStats={(updater) => {
+          if (typeof updater === 'function') {
+            onUpdateStats(updater(stats));
+          } else {
+            onUpdateStats(updater);
+          }
+        }}
+      />
+
+      {/* Daily 3 Gratitudes Biblical Parchment (Colossians 3:17 & 1 Thess 5:18) */}
+      <DailyGratitudeParchment
+        stats={stats}
+        onUpdateStats={(updater) => {
+          if (typeof updater === 'function') {
+            onUpdateStats(updater(stats));
+          } else {
+            onUpdateStats(updater);
+          }
+        }}
+      />
+
+      {/* Shared Intercession Mural (Firestore Database & Community Prayer Requests) */}
+      <SharedIntercessionMural
+        stats={stats}
+        onUpdateStats={(updater) => {
+          if (typeof updater === 'function') {
+            onUpdateStats(updater(stats));
+          } else {
+            onUpdateStats(updater);
+          }
+        }}
+      />
+
       {/* Action Bar & Filters */}
       <div className="bg-slate-900/80 rounded-2xl border border-slate-800 p-4 md:p-6 space-y-4">
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
-          {/* New Prayer Button */}
-          <button
-            onClick={() => {
-              setIsFormOpen(!isFormOpen);
-              soundService.playScriptureTone();
-            }}
-            className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-sm bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-slate-950 shadow-md transition-all active:scale-95"
-          >
-            {isFormOpen ? <ChevronUp className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
-            <span>{isFormOpen ? 'Recolher Formulário' : 'Novo Registro de Oração'}</span>
-          </button>
+          <div className="flex flex-wrap items-center gap-2.5">
+            {/* New Prayer Button */}
+            <button
+              onClick={() => {
+                setIsFormOpen(!isFormOpen);
+                soundService.playScriptureTone();
+              }}
+              className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-sm bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-slate-950 shadow-md transition-all active:scale-95"
+            >
+              {isFormOpen ? <ChevronUp className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+              <span>{isFormOpen ? 'Recolher Formulário' : 'Novo Registro de Oração'}</span>
+            </button>
+
+            {/* Export Parchment Button */}
+            <button
+              onClick={() => {
+                setIsExportModalOpen(true);
+                soundService.playScriptureTone();
+              }}
+              className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-bold text-xs sm:text-sm bg-gradient-to-r from-amber-600/30 to-amber-500/20 hover:from-amber-500/30 hover:to-amber-400/30 text-amber-200 border border-amber-500/40 shadow-md transition-all active:scale-95"
+              title="Exportar memorial semanal em formato pergaminho para impressão ou download"
+            >
+              <Scroll className="w-4 h-4 text-amber-400" />
+              <span>Exportar Pergaminho</span>
+            </button>
+          </div>
 
           {/* Search Bar */}
           <div className="relative flex-1 max-w-md">
@@ -791,6 +878,33 @@ export const PrayerJournalView: React.FC<PrayerJournalViewProps> = ({
           </div>
         </div>
       )}
+
+      {/* Local Visual Prayer Reminder Modal */}
+      <PrayerReminderNotificationModal
+        isOpen={!!localReminderAlert}
+        reminder={localReminderAlert}
+        onClose={() => setLocalReminderAlert(null)}
+        onNavigateToJournal={() => {
+          if (localReminderAlert) {
+            handleOpenFromReminder(localReminderAlert);
+          }
+        }}
+        onUpdateStats={(updater) => {
+          if (typeof updater === 'function') {
+            onUpdateStats(updater(stats));
+          } else {
+            onUpdateStats(updater);
+          }
+        }}
+      />
+
+      {/* Sacred Parchment Weekly Export & Print Modal */}
+      <PrayerParchmentExportModal
+        isOpen={isExportModalOpen}
+        onClose={() => setIsExportModalOpen(false)}
+        stats={stats}
+        entries={entries}
+      />
     </div>
   );
 };

@@ -1,0 +1,103 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidPrayerRequest(data) {
+      return data.id is string && isValidId(data.id)
+        && data.authorId is string && isValidId(data.authorId)
+        && data.authorName is string && data.authorName.size() >= 2 && data.authorName.size() <= 100
+        && data.title is string && data.title.size() >= 3 && data.title.size() <= 140
+        && data.description is string && data.description.size() <= 1200
+        && data.category is string && data.category.size() <= 50
+        && data.prayedCount is number && data.prayedCount >= 0
+        && data.prayedUserIds is list && data.prayedUserIds.size() <= 1000
+        && data.keys().hasAll(['id', 'authorId', 'authorName', 'title', 'description', 'category', 'prayedCount', 'prayedUserIds'])
+        && data.keys().hasOnly(['id', 'authorId', 'authorName', 'title', 'description', 'category', 'prayedCount', 'prayedUserIds', 'createdAt', 'isAnswered']);
+    }
+
+    function isValidUserProfile(data) {
+      return data.userId is string && isValidId(data.userId)
+        && data.worshipScore is number && data.worshipScore >= 0
+        && data.level is number && data.level >= 1
+        && data.keys().hasAll(['userId', 'worshipScore', 'level'])
+        && data.keys().hasOnly(['userId', 'worshipScore', 'level', 'displayName', 'selectedFrameId', 'unlockedFrames', 'updatedAt']);
+    }
+
+    // Connection test document
+    match /test/{docId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Prayer Requests mural collection
+    match /prayer_requests/{requestId} {
+      allow get: if isValidId(requestId);
+      allow list: if true;
+
+      allow create: if isSignedIn() 
+        && isValidId(requestId)
+        && isValidPrayerRequest(incoming())
+        && incoming().id == requestId
+        && incoming().authorId == request.auth.uid;
+
+      allow update: if isSignedIn()
+        && isValidId(requestId)
+        && isValidPrayerRequest(incoming())
+        && incoming().id == existing().id
+        && incoming().authorId == existing().authorId
+        && (
+          // Action 1: Author updates text or answered status
+          (existing().authorId == request.auth.uid && incoming().diff(existing()).affectedKeys().hasOnly(['title', 'description', 'category', 'isAnswered'])) ||
+          // Action 2: Any believer intercedes ("Já orei por isso")
+          (incoming().prayedCount == existing().prayedCount + 1 && incoming().diff(existing()).affectedKeys().hasOnly(['prayedCount', 'prayedUserIds']))
+        );
+
+      allow delete: if isSignedIn()
+        && isValidId(requestId)
+        && existing().authorId == request.auth.uid;
+    }
+
+    // User profiles collection
+    match /users/{userId} {
+      allow get: if isSignedIn() && isValidId(userId);
+      allow list: if false;
+
+      allow create: if isSignedIn()
+        && isValidId(userId)
+        && request.auth.uid == userId
+        && isValidUserProfile(incoming())
+        && incoming().userId == userId;
+
+      allow update: if isSignedIn()
+        && isValidId(userId)
+        && request.auth.uid == userId
+        && isValidUserProfile(incoming())
+        && incoming().userId == existing().userId
+        && incoming().diff(existing()).affectedKeys().hasOnly(['worshipScore', 'level', 'displayName', 'selectedFrameId', 'unlockedFrames', 'updatedAt']);
+
+      allow delete: if false;
+    }
+  }
+}

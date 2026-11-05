@@ -1,0 +1,104 @@
+{
+  "entities": {
+    "PrayerRequest": {
+      "title": "PrayerRequest",
+      "description": "Pedido de oração intercessória compartilhado no mural da comunidade",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Identificador único do pedido de oração"
+        },
+        "authorId": {
+          "type": "string",
+          "description": "ID do usuário que postou o pedido"
+        },
+        "authorName": {
+          "type": "string",
+          "description": "Nome visível do intercessor/autor"
+        },
+        "title": {
+          "type": "string",
+          "description": "Título do pedido de oração",
+          "maxLength": 140
+        },
+        "description": {
+          "type": "string",
+          "description": "Detalhes ou clamor do pedido",
+          "maxLength": 1000
+        },
+        "category": {
+          "type": "string",
+          "description": "Categoria do clamor (cura, familia, espiritual, libertacao, gratidao)"
+        },
+        "prayedCount": {
+          "type": "number",
+          "description": "Quantidade de intercessões recebidas"
+        },
+        "prayedUserIds": {
+          "type": "array",
+          "description": "Lista de IDs de usuários que oraram por este pedido"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp ISO da criação"
+        },
+        "isAnswered": {
+          "type": "boolean",
+          "description": "Se o pedido já recebeu testemunho de resposta"
+        }
+      },
+      "required": ["id", "authorId", "authorName", "title", "description", "category", "prayedCount"]
+    },
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Perfil e progresso espiritual do adorador",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "UID do usuário no Firebase Auth"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Nome de fé do adorador"
+        },
+        "worshipScore": {
+          "type": "number",
+          "description": "Pontuação de devoção espiritual"
+        },
+        "level": {
+          "type": "number",
+          "description": "Nível de maturidade espiritual"
+        },
+        "selectedFrameId": {
+          "type": "string",
+          "description": "Moldura de avatar selecionada"
+        },
+        "unlockedFrames": {
+          "type": "array",
+          "description": "Molduras desbloqueadas"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp ISO da última atualização"
+        }
+      },
+      "required": ["userId", "worshipScore", "level"]
+    }
+  },
+  "firestore": {
+    "/prayer_requests/{requestId}": {
+      "schema": {
+        "$ref": "#/entities/PrayerRequest"
+      },
+      "description": "Mural de pedidos de oração comunitários"
+    },
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/UserProfile"
+      },
+      "description": "Perfis e estado dos adoradores"
+    }
+  }
+}

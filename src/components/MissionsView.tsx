@@ -24,12 +24,21 @@ import {
   Compass,
 } from 'lucide-react';
 import { DailyPromiseCard } from './DailyPromiseCard';
+import { RadioMaintenanceCountdownCard } from './RadioMaintenanceCountdownCard';
+import { DailyGoalsFeedbackCard } from './DailyGoalsFeedbackCard';
+import { MinistryMapBannerCard } from './MinistryMapBannerCard';
+import { RadioMaintenanceConfig, DailySpiritualGoalsConfig } from '../types/game';
 
 interface MissionsViewProps {
   stats: PlayerStats;
   onUpdateStats: (newStats: PlayerStats) => void;
   onNavigateToDecree: (decreeId: string) => void;
   onNavigateToJournal?: () => void;
+  maintenanceConfig?: RadioMaintenanceConfig;
+  dailyGoalsConfig?: DailySpiritualGoalsConfig;
+  onOpenAdmin?: () => void;
+  onNavigateToRadio?: () => void;
+  onOpenMinistryMap?: () => void;
 }
 
 export const MissionsView: React.FC<MissionsViewProps> = ({
@@ -37,6 +46,11 @@ export const MissionsView: React.FC<MissionsViewProps> = ({
   onUpdateStats,
   onNavigateToDecree,
   onNavigateToJournal,
+  maintenanceConfig,
+  dailyGoalsConfig,
+  onOpenAdmin,
+  onNavigateToRadio,
+  onOpenMinistryMap,
 }) => {
   const [selectedMissionId, setSelectedMissionId] = useState<string>(MISSIONS[0].id);
   const currentMission = MISSIONS.find((m) => m.id === selectedMissionId) || MISSIONS[0];
@@ -202,6 +216,23 @@ export const MissionsView: React.FC<MissionsViewProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Radio Maintenance Schedule Countdown Component */}
+      <RadioMaintenanceCountdownCard
+        maintenanceConfig={maintenanceConfig}
+        onOpenAdmin={onOpenAdmin}
+      />
+
+      {/* Daily Spiritual Goals Feedback & Altar Devocional (Configured by Admin) */}
+      <DailyGoalsFeedbackCard
+        stats={stats}
+        onUpdateStats={onUpdateStats}
+        goalsConfig={dailyGoalsConfig}
+        onNavigateToDecree={onNavigateToDecree}
+        onNavigateToJournal={onNavigateToJournal}
+        onOpenAdmin={onOpenAdmin}
+        onNavigateToRadio={onNavigateToRadio}
+      />
 
       {/* Biblical Promise of Protection and Authority Component */}
       <DailyPromiseCard

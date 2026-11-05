@@ -4,19 +4,27 @@
  */
 
 import React from 'react';
-import { Volume2, VolumeX, Sparkles, Award } from 'lucide-react';
+import { Volume2, VolumeX, Sparkles, Award, Settings, Clock, Trophy, MapPin } from 'lucide-react';
 import { soundService } from '../services/soundEffects';
+import { PlayerStats, RadioMaintenanceConfig } from '../types/game';
+import { RadioMaintenanceCountdownBadge } from './RadioMaintenanceCountdownBadge';
+import { SpiritualAvatarBadge } from './SpiritualAvatarBadge';
 
 interface TopBarProps {
-  activeTab: 'missoes' | 'decretos' | 'batalha' | 'vigilia' | 'diario' | 'pregacao' | 'pratica' | 'biblia';
+  activeTab: 'missoes' | 'decretos' | 'batalha' | 'vigilia' | 'diario' | 'pregacao' | 'pratica' | 'biblia' | 'rank';
   onSelectTab: (
-    tab: 'missoes' | 'decretos' | 'batalha' | 'vigilia' | 'diario' | 'pregacao' | 'pratica' | 'biblia'
+    tab: 'missoes' | 'decretos' | 'batalha' | 'vigilia' | 'diario' | 'pregacao' | 'pratica' | 'biblia' | 'rank'
   ) => void;
   soundMuted: boolean;
   onToggleSound: () => void;
   reconciledCount: number;
   onOpenMedals?: () => void;
   unlockedMedalsCount?: number;
+  onOpenAdmin?: () => void;
+  onOpenMinistryMap?: () => void;
+  maintenanceConfig?: RadioMaintenanceConfig;
+  stats?: PlayerStats;
+  onOpenAvatarFrames?: () => void;
 }
 
 export const TopBar: React.FC<TopBarProps> = ({
@@ -26,11 +34,16 @@ export const TopBar: React.FC<TopBarProps> = ({
   onToggleSound,
   onOpenMedals,
   unlockedMedalsCount = 0,
+  onOpenAdmin,
+  onOpenMinistryMap,
+  maintenanceConfig,
+  stats,
+  onOpenAvatarFrames,
 }) => {
   return (
     <header className="sticky top-0 z-50 bg-slate-950/90 backdrop-blur-md border-b border-amber-500/20 px-4 md:px-8 py-3.5 transition-colors">
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-8">
-        {/* Zone 1: Brand title wordmark */}
+        {/* Zone 1: Brand title wordmark & Spiritual Avatar Profile Seal */}
         <div className="flex items-center gap-3 shrink-0">
           <button
             onClick={() => onSelectTab('missoes')}
@@ -40,6 +53,18 @@ export const TopBar: React.FC<TopBarProps> = ({
               Em Nome de Jesus
             </span>
           </button>
+
+          {stats && (
+            <div className="pl-2 border-l border-amber-500/20">
+              <SpiritualAvatarBadge
+                stats={stats}
+                onOpenMedals={onOpenMedals}
+                onOpenFrameSelector={onOpenAvatarFrames}
+                size="sm"
+                showTitle={true}
+              />
+            </div>
+          )}
         </div>
 
         {/* Zone 2: Navigation links (single line, clean typography) */}
@@ -124,6 +149,18 @@ export const TopBar: React.FC<TopBarProps> = ({
           >
             Bíblia da Graça
           </button>
+          <button
+            onClick={() => onSelectTab('rank')}
+            className={`whitespace-nowrap shrink-0 transition-colors hover:text-amber-300 pb-1 flex items-center gap-1.5 ${
+              activeTab === 'rank'
+                ? 'text-yellow-300 border-b-2 border-yellow-400 font-bold'
+                : 'text-amber-300/90 font-medium'
+            }`}
+            title="Classificação de Adoradores e Gamificação do Louvor"
+          >
+            <Trophy className="w-4 h-4 text-yellow-400" />
+            <span>Rank de Adoradores</span>
+          </button>
         </nav>
 
         {/* Zone 3: Single primary action & accessibility sound control */}
@@ -151,6 +188,49 @@ export const TopBar: React.FC<TopBarProps> = ({
             </button>
           )}
 
+          {onOpenAvatarFrames && (
+            <button
+              onClick={onOpenAvatarFrames}
+              className="flex items-center gap-1.5 px-3 py-2 text-xs md:text-sm font-semibold text-amber-300 hover:text-amber-200 bg-slate-900/90 hover:bg-slate-800 border border-amber-500/30 rounded-lg transition-all active:scale-95 shadow-sm"
+              title="Personalizar Moldura de Avatar & Resplendor (500, 1000, 2000, 5000 pts)"
+            >
+              <Sparkles className="w-4 h-4 text-amber-400" />
+              <span className="hidden lg:inline">Moldura</span>
+            </button>
+          )}
+
+          {onOpenMinistryMap && (
+            <button
+              onClick={onOpenMinistryMap}
+              className="flex items-center gap-1.5 px-3 py-2 text-xs md:text-sm font-semibold text-amber-300 hover:text-amber-200 bg-slate-900/90 hover:bg-slate-800 border border-amber-500/30 rounded-lg transition-all active:scale-95 shadow-sm"
+              title="Abrir Mapa do Ministério · Jornada Apostólica pelos Locais Bíblicos"
+            >
+              <MapPin className="w-4 h-4 text-amber-400" />
+              <span className="hidden md:inline">Mapa</span>
+            </button>
+          )}
+
+          {/* Visual Radio Maintenance Countdown Component */}
+          {maintenanceConfig && (
+            <RadioMaintenanceCountdownBadge
+              maintenanceConfig={maintenanceConfig}
+              onOpenAdmin={onOpenAdmin}
+              variant="header"
+              showDetailsPopover={true}
+            />
+          )}
+
+          {onOpenAdmin && (
+            <button
+              onClick={onOpenAdmin}
+              className="flex items-center gap-1.5 px-3 py-2 text-xs md:text-sm font-semibold text-amber-300 hover:text-amber-200 bg-slate-900/90 hover:bg-slate-800 border border-amber-500/30 rounded-lg transition-all active:scale-95 shadow-sm"
+              title="Abrir Área Administrativa da Rádio 24h & Streams"
+            >
+              <Settings className="w-4 h-4 text-amber-400" />
+              <span className="hidden md:inline">Admin Rádio</span>
+            </button>
+          )}
+
           <button
             onClick={() => {
               onSelectTab('batalha');
@@ -166,6 +246,26 @@ export const TopBar: React.FC<TopBarProps> = ({
 
       {/* Nav strip for smaller screens */}
       <div className="flex xl:hidden items-center gap-2 pt-2.5 mt-2 border-t border-slate-800/80 text-xs text-slate-300 overflow-x-auto pb-1">
+        {/* Mobile Real-time Maintenance Countdown Badge */}
+        {maintenanceConfig && (
+          <div className="shrink-0">
+            <RadioMaintenanceCountdownBadge
+              maintenanceConfig={maintenanceConfig}
+              onOpenAdmin={onOpenAdmin}
+              variant="footer"
+              showDetailsPopover={true}
+            />
+          </div>
+        )}
+        {onOpenAdmin && (
+          <button
+            onClick={onOpenAdmin}
+            className="px-2.5 py-1 rounded whitespace-nowrap text-amber-300 font-semibold bg-amber-500/10 border border-amber-500/20 flex items-center gap-1"
+          >
+            <Settings className="w-3.5 h-3.5 text-amber-400" />
+            <span>Admin Rádio</span>
+          </button>
+        )}
         {onOpenMedals && (
           <button
             onClick={onOpenMedals}
@@ -222,6 +322,15 @@ export const TopBar: React.FC<TopBarProps> = ({
           className={`px-3 py-1 rounded whitespace-nowrap ${activeTab === 'biblia' ? 'text-amber-300 font-semibold bg-slate-900' : ''}`}
         >
           Bíblia
+        </button>
+        <button
+          onClick={() => onSelectTab('rank')}
+          className={`px-3 py-1 rounded whitespace-nowrap flex items-center gap-1 ${
+            activeTab === 'rank' ? 'text-yellow-300 font-bold bg-slate-900 border border-yellow-500/30' : 'text-amber-300'
+          }`}
+        >
+          <Trophy className="w-3.5 h-3.5 text-yellow-400" />
+          <span>Rank Adoradores</span>
         </button>
       </div>
     </header>
